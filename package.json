@@ -1,0 +1,19 @@
+{
+  "name": "@penggy/mysql",
+  "version": "1.0.0",
+  "description": "Promise wrapper of mysql",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "keywords": [],
+  "author": "penggy <peng.wu@foxmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "2.15.0"
+  }
+}
