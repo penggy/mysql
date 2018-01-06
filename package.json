@@ -1,6 +1,6 @@
 {
   "name": "@penggy/mysql",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Promise wrapper of mysql",
   "main": "index.js",
   "scripts": {
@@ -8,12 +8,20 @@
   },
   "files": [
     "index.js",
+    "index.d.ts",
     "README.md"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/penggy/mysql"
+  },
   "keywords": [],
   "author": "penggy <peng.wu@foxmail.com>",
   "license": "ISC",
   "dependencies": {
     "mysql": "2.15.0"
+  },
+  "devDependencies": {
+    "@types/mysql": "2.15.2"
   }
 }

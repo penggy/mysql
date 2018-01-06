@@ -1,16 +1,12 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-const mysql = require("mysql");
-const events = require("events");
-module.exports = class Mysql extends events.EventEmitter {
-    constructor(cfg) {
+import * as mysql from 'mysql'
+import * as events from 'events'
+import * as path from 'path'
+
+export = class Mysql extends events.EventEmitter {
+
+    pool: mysql.Pool;
+
+    constructor(cfg: { host: string | undefined; user: string | undefined; password: string | undefined; database: string | undefined; port: number | undefined; }) {
         super();
         this.pool = mysql.createPool({
             connectionLimit: 10,
@@ -23,56 +19,62 @@ module.exports = class Mysql extends events.EventEmitter {
             multipleStatements: true
         });
     }
+
     destroy() {
-        return new Promise((resolve, reject) => {
-            this.pool.end(e => {
-                if (e) {
+        return new Promise<void>((resolve, reject) => {
+            this.pool.end( e => {
+                if(e) {
                     reject(e);
                     return;
                 }
                 resolve();
-            });
-        });
+            })
+        })
     }
-    get(sql, ...params) {
-        return new Promise((resolve, reject) => {
+
+    
+    get(sql: string, ...params) {
+        return new Promise<any>((resolve, reject) => {
             this.pool.query(sql, params, (e, results, fields) => {
-                if (e) {
+                if(e){
                     reject(e);
                     return;
                 }
-                if (results.length == 0) {
+                if(results.length == 0) {
                     resolve(null);
                     return;
                 }
                 resolve(results[0]);
-            });
-        });
+            })
+        })
     }
-    all(sql, ...params) {
-        return new Promise((resolve, reject) => {
+
+    all(sql: string, ...params) {
+        return new Promise<any[]>((resolve, reject) => {
             this.pool.query(sql, params, (e, results, fields) => {
-                if (e) {
+                if(e) {
                     reject(e);
                     return;
                 }
                 resolve(results);
-            });
-        });
+            })
+        })
     }
-    run(sql, ...params) {
-        return new Promise((resolve, reject) => {
+
+    run(sql: string, ...params) {
+        return new Promise<any>((resolve, reject) => {
             this.pool.query(sql, params, (e, result) => {
-                if (e) {
+                if(e) {
                     reject(e);
                     return;
                 }
                 resolve(result);
-            });
-        });
+            })
+        })
     }
-    exec(sql) {
-        return new Promise((resolve, reject) => {
+
+    exec(sql: string) {
+        return new Promise<void>((resolve, reject) => {
             this.pool.getConnection((e, conn) => {
                 if (e) {
                     reject(e);
@@ -89,7 +91,7 @@ module.exports = class Mysql extends events.EventEmitter {
                             conn.rollback(() => {
                                 conn.release();
                                 reject(e);
-                            });
+                            })
                             return;
                         }
                         conn.commit(e => {
@@ -97,34 +99,39 @@ module.exports = class Mysql extends events.EventEmitter {
                                 conn.rollback(() => {
                                     conn.release();
                                     reject(e);
-                                });
+                                })
                                 return;
                             }
                             conn.release();
                             resolve();
-                        }); //commit
-                    }); //query
-                }); //beginTransaction
-            }); //getConnection
-        });
+                        })//commit
+    
+                    })//query
+    
+                })//beginTransaction
+    
+            })//getConnection
+    
+        })
     }
-    page(start, limit, sql, ...params) {
-        return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+
+    page(start: number, limit: number, sql: string, ...params) {
+        return new Promise<{total: number, rows:any[]}>(async (resolve, reject) => {
             try {
                 var cntSql = sql.replace(/\s*(o|O)(r|R)(d|D)(e|E)(r|R)\s+(b|B)(y|Y).*$/, "");
                 cntSql = `select count(*) as count from (${cntSql}) as total`;
-                var ret = {};
-                var row = yield this.get(cntSql, ...params);
+                var ret:any = {};
+                var row = await this.get(cntSql, ...params);
                 ret.total = row["count"];
                 var pageSql = sql;
                 pageSql += " limit ?,?";
                 params.push(start, limit);
-                ret.rows = yield this.all(pageSql, ...params);
+                ret.rows = await this.all(pageSql, ...params);
                 resolve(ret);
-            }
-            catch (e) {
+            } catch (e) {
                 reject(e);
             }
-        }));
+        })        
     }
-};
+
+}
