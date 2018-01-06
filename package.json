@@ -1,6 +1,6 @@
 {
   "name": "@penggy/mysql",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Promise wrapper of mysql",
   "main": "index.js",
   "scripts": {
