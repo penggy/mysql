@@ -3,7 +3,6 @@ import * as events from 'events'
 import * as path from 'path'
 
 export = class Mysql extends events.EventEmitter {
-
     pool: mysql.Pool;
 
     constructor(cfg: { host: string | undefined; user: string | undefined; password: string | undefined; database: string | undefined; port: number | undefined; }) {

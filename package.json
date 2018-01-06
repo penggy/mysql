@@ -1,8 +1,9 @@
 {
   "name": "@penggy/mysql",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "description": "Promise wrapper of mysql",
-  "main": "index.js",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "test": "node test.js"
   },
@@ -19,9 +20,7 @@
   "author": "penggy <peng.wu@foxmail.com>",
   "license": "ISC",
   "dependencies": {
-    "mysql": "2.15.0"
-  },
-  "devDependencies": {
+    "mysql": "2.15.0",
     "@types/mysql": "2.15.2"
   }
 }

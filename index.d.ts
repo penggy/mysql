@@ -3,11 +3,11 @@ import * as mysql from 'mysql';
 import * as events from 'events';
 declare const _default: {
     new (cfg: {
-        host: string | undefined;
-        user: string | undefined;
-        password: string | undefined;
-        database: string | undefined;
-        port: number | undefined;
+        host: string;
+        user: string;
+        password: string;
+        database: string;
+        port: number;
     }): {
         pool: mysql.Pool;
         destroy(): Promise<void>;
@@ -25,7 +25,7 @@ declare const _default: {
         prependListener(event: string | symbol, listener: (...args: any[]) => void): any;
         prependOnceListener(event: string | symbol, listener: (...args: any[]) => void): any;
         removeListener(event: string | symbol, listener: (...args: any[]) => void): any;
-        removeAllListeners(event?: string | symbol | undefined): any;
+        removeAllListeners(event?: string | symbol): any;
         setMaxListeners(n: number): any;
         getMaxListeners(): number;
         listeners(event: string | symbol): Function[];
